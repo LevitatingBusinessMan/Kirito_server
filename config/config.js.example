@@ -1,0 +1,10 @@
+export default {
+    CLIENT_ID: "",
+    CLIENT_SECRET: "",
+    SERVER_INVITE: "",
+    redirect_uri: "",
+
+    "KiritoBotIP": "",
+    "LavainkIP": "",
+    "port": 3000
+}

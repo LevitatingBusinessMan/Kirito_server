@@ -1,0 +1,25 @@
+{
+  "name": "kirito_server",
+  "version": "0.0.1",
+  "description": "",
+  "scripts": {
+    "dev": "node src/server.js",
+    "build": "next build",
+    "start": "NODE_ENV=production node src/server.js"
+  },
+  "keywords": [],
+  "author": "LevitatingBusinessMan",
+  "license": "MIT",
+  "dependencies": {
+    "btoa": "^1.2.1",
+    "cookie-parser": "^1.4.3",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "express": "^4.15.2",
+    "isomorphic-unfetch": "^2.1.1",
+    "materialize-css": "^1.0.0-rc.2",
+    "next": "^6.1.1",
+    "nookies": "^1.1.1",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2"
+  }
+}
