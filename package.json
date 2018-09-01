@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "dev": "node src/server.js",
-    "build": "next build",
+    "build": "next build ./src",
     "start": "NODE_ENV=production node src/server.js"
   },
   "keywords": [],

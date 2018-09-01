@@ -6,10 +6,13 @@ import GuildBar from "../components/GuildBar"
 import Main from "../components/Main"
 // eslint-disable-next-line no-unused-vars
 import Link from "next/link"
+import getConfig from "next/config"
 import nookies from "nookies"
 import Router from "next/router"
 import fetch from "isomorphic-unfetch"
 import React from "react"
+
+const {publicRuntimeConfig} = getConfig()
 
 // eslint-disable-next-line no-unused-vars
 class Alert extends React.Component {
@@ -144,7 +147,7 @@ class Dashboard extends React.Component {
             // eslint-disable-next-line no-redeclare
             else var hostname = window.location.hostname
 
-            const response = await fetch(`http://${hostname}:3000/api/kirito/get_servers?id=${user.id}`)
+            const response = await fetch(`http://${hostname}:${publicRuntimeConfig.publicPort}/api/kirito/get_servers?id=${user.id}`)
             if (response.status !== 200) {
                 if (response.status === 418)
                     error = "Failed connecting to Kirito"

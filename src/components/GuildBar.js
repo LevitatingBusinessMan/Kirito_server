@@ -21,7 +21,7 @@ const GuildBar = props => (
                         {
                             guild.icon ?
                                 <img className={"guild "+(props.guild == guild.id ? "active":"")} src={`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.webp`}/>
-                                : <div className={"guild no-name "+(props.guild == guild.id ? "active":"")}>{guild.name}</div>
+                                : <div className={"guild no-name "+(props.guild == guild.id ? "active":"")}><span>{guild.name.replace(/(\B\w)|\s/g,"")}</span></div>
                         }
                         <span className="tooltiptext nowrap left">{guild.name}</span>
                     </div>
@@ -82,7 +82,14 @@ const GuildBar = props => (
                 border-radius: 30% !important; 
             }
             .no-name {
+                vertical-align: middle;
+                text-align: center;
+                font-size: 20px;
                 background-color: #000;
+            }
+            .no-name span {
+                position:relative;
+                top: calc(50% - 12px);
             }
             .active {
                 border-radius: 30% !important; 

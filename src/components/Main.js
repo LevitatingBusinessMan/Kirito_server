@@ -1,5 +1,53 @@
 import fetch from "isomorphic-unfetch"
 import React from "react"
+import getConfig from "next/config"
+// eslint-disable-next-line no-unused-vars
+import SimpleSetting from "../components/SimpleSetting"
+
+const {publicRuntimeConfig} = getConfig()
+
+// eslint-disable-next-line no-unused-vars
+const SaveMessage = () => (
+    <div className="SaveMessage">
+        <span className="save">Save by clicking on</span>
+        <div className="saveButton tooltip">
+            <span className="tooltiptext left">Save setting (example)</span>
+        </div>
+        <style jsx>{`
+        .saveButton {
+            position: absolute;
+            left: 66px;
+            width: 202px;
+            display: inline;
+            background-image: url(/static/pencil-orange.svg);
+            background-size: 19px 19px;
+            background-repeat: no-repeat;
+            background-position: center;
+            cursor: pointer;
+        }
+        .saveButton:hover {
+            background-image: url(/static/pencil-green.svg);
+        }
+        .tooltiptext {
+            line-height: 9px;
+            left: 121px;
+            height: 19px;
+            background-color: #4EBA00 !important;
+            float: right;
+        }
+        .tooltiptext::after {
+            top: 5px !important;
+            border-color: transparent #4EBA00 transparent transparent !important;
+        }
+        .SaveMessage {
+            display: inline-block;
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+        }
+        `}</style>
+    </div>
+)
 
 const NoGuildStyle = (
     <style>{`
@@ -13,6 +61,7 @@ const NoGuildStyle = (
         width: calc(100% - 100px - 15px);
         height: calc(100% - 60px - 15px);
         background-image: url('/static/wompus.png');
+        background-color: #35383D;
         background-size: cover;
         z-index: -1;
     }
@@ -25,87 +74,7 @@ const NoGuildStyle = (
 `}</style>
 )
 
-// eslint-disable-next-line no-unused-vars
-class SimpleSetting extends React.Component {
-    constructor(props) {
-        super(props)
 
-        this.state = {}
-        this.state.edited = false
-        this.state.defaultValue = this.props.value
-
-        this.onChange = this.onChange.bind(this)
-        this.saveHandle = this.saveHandle.bind(this)
-    }
-
-    onChange(event) {
-        if (event.target.value !== event.target.defaultValue)
-            this.setState(({edited:true, value: event.target.value, defaultValue: event.target.defaultValue}))
-        else this.setState(({edited:false, value: event.target.value, defaultValue: event.target.defaultValue}))
-    }
-
-    saveHandle(event) {
-        this.props.save(this.props.name, this.state.value)
-            .then(() => this.setState(prev => ({edited:false, defaultValue: prev.value})))
-    }
-
-    render() {
-        return (
-            <div className="simpleSetting">
-                {
-                    this.state.edited ?
-                        <img className="tick" src="/static/tick.svg" draggable="false" onClick={this.saveHandle}/>
-                        : ""
-                }
-                <span>{this.props.name}:</span>
-                <input defaultValue={this.state.defaultValue ? this.state.defaultValue : this.props.default} onChange={this.onChange}/>
-                <style jsx>{`
-                .simpleSetting {
-                    margin: 50px 0;
-                    padding: 10px 15px;
-                    width: ${this.props.width};
-                    background-color: #23272A;
-                    border-radius: 5px;
-                    display: inline-block;
-                }
-                span {
-                    text-transform: uppercase;
-                    text-decoration: underline;
-                    display: block;
-                    margin-right: 10px;
-                }
-                input {
-                    background-color: #35383D;
-                    display: inline-block;
-                    margin-top: 3px;
-                    border: none;
-                    color: #fff;
-                    width: 100%;
-                    padding: 3px 5px;
-                    border-radius: 5px;
-                    outline: none;
-                }
-                input:focus {
-                    box-shadow: 0 0 10px 3px #ff751a;
-                }
-                .tick {
-                    display: inline;
-                    cursor: pointer;
-                    position: relative;
-                    top: 24px;
-                    right: 7px;
-                    width: 19px;
-                    height: 19px;
-                    float: right;
-                }
-                .tick:hover ~ input{
-                    box-shadow: 0 0 10px 3px #4EBA00;
-                }
-                `}</style>
-            </div>
-        )
-    }
-}
 
 class Main extends React.Component {
     constructor(props) {
@@ -119,9 +88,9 @@ class Main extends React.Component {
     async Save(name, value) {
         return new Promise( async (resolve,reject) => {
             var hostname = window.location.hostname
-            console.log(hostname)
-            const url = `http://${hostname}:3000/api/kirito/save?id=${this.props.guild.id}&name=${name}&value=${JSON.stringify(value)}`
+            const url = encodeURI(`http://${hostname}:${publicRuntimeConfig.publicPort}/api/kirito/save?id=${this.props.guild.id}&name=${name}&value=${JSON.stringify(value)}`)
             
+            console.log(url)
             const response = await fetch(url)
             if (response.status !== 200) {
                 if (response.status === 418)
@@ -158,6 +127,7 @@ class Main extends React.Component {
                 <div className="main">
                     <span className="guildName">{this.props.guild.name}</span>
                     <SimpleSetting name="prefix" value={this.state.guild.prefix} default="k!" width="237px" save={this.Save.bind(this)} />
+                    <SaveMessage />
                     <style jsx>{`
                         .main {
                             position: absolute;

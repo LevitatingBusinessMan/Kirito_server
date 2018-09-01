@@ -6,5 +6,5 @@ export default {
 
     "KiritoBotIP": "",
     "LavainkIP": "",
-    "port": 3000
+    "port": 80
 }

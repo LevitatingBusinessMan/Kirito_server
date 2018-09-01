@@ -18,6 +18,7 @@ app.prepare()
     server.use(cookieParser())
 
     server.get("/invite", (req, res) => {
+        //redirect not working because???
         res.redirect(`https://discordapp.com/oauth2/authorize?client_id=${CLIENT_ID}&scope=bot&permissions=8`)
     });
 
@@ -27,7 +28,7 @@ app.prepare()
 
 
     server.get("/login", (req, res) => {
-        res.redirect(`https://discordapp.com/api/oauth2/authorize?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${redirect_uri}&scope=guilds%20identify`)
+        res.redirect(`https://discordapp.com/api/oauth2/authorize?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${redirect_uri}&scope=identify`)
     });
 
     server.get("/logout", (req,res) => {
@@ -64,7 +65,11 @@ app.prepare()
                 Authorization: `Basic ${btoa(`Kirito:${CLIENT_SECRET}`)}`
             }
         }).then(async response => res.status(response.status).send(await response.json()))
-        .catch(e => {console.log(e);res.status(418).send("Kirito offline")})
+        .catch(e => {
+            if (e.code === "ECONNREFUSED")
+                res.status(418).send("Kirito offline")
+            else res.status(500).send(e)
+        })
     })
 
     server.get("/api/discord/callback", async (req, res) => {
@@ -73,7 +78,7 @@ app.prepare()
             error: "NoCodeProvided",
           });
         const code = req.query.code
-        const response = await (await fetch(`https://discordapp.com/api/oauth2/token?grant_type=authorization_code&code=${code}&redirect_uri=${redirect_uri}&scope=guilds%20identify`,{
+        const response = await (await fetch(`https://discordapp.com/api/oauth2/token?grant_type=authorization_code&code=${code}&redirect_uri=${redirect_uri}&scope=identify`,{
             method: "POST",
             headers: {
                 Authorization: basicAuth,
@@ -97,7 +102,7 @@ app.prepare()
         });
         const token = req.query.token
 
-        const response = await (await fetch(`https://discordapp.com/api/oauth2/token?grant_type=refresh_token&refresh_token=${token}&redirect_uri=${redirect_uri}&scope=guilds%20identify`,{
+        const response = await (await fetch(`https://discordapp.com/api/oauth2/token?grant_type=refresh_token&refresh_token=${token}&redirect_uri=${redirect_uri}&scope=identify`,{
             method: "POST",
             headers: {
                 Authorization: basicAuth,
@@ -143,7 +148,7 @@ app.prepare()
 
     server.listen(port, (err) => {
         if (err) throw err
-        console.log("> Ready on http://localhost:3000")
+        console.log(`> Ready on http://localhost:${port}`)
     })
 })
 .catch((ex) => {

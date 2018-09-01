@@ -2,3 +2,5 @@
 config/config.js
 .npmrc
 node_modules
+src/.next
+TODO
