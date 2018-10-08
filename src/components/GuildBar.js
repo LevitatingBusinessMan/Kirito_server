@@ -13,7 +13,7 @@ const GuildBar = props => (
             <Link href="/"><img className="Kirito guild"src="/static/Kirito.png" draggable="false"/></Link>
             <span className="tooltiptext nowrap left">Home</span>
         </div>
-        <p className="guildCount">{`${props.guilds.length} ONLINE`}</p>
+        <p className="guildCount">{`${props.guilds.length} GUILDS`}</p>
         {
             props.guilds.map(guild =>
                 (<Link key={guild.id} as={`/dashboard/${guild.id}`} href={`/dashboard?guild=${guild.id}&reload=false`}>
@@ -85,9 +85,14 @@ const GuildBar = props => (
                 vertical-align: middle;
                 text-align: center;
                 font-size: 20px;
-                background-color: #000;
+                background-color: #35383D;
+                transition: background-color 0.5s;
+            }
+            .no-name:hover, .no-name.active {
+                background-color: #7289DA;
             }
             .no-name span {
+                cursor: pointer;
                 position:relative;
                 top: calc(50% - 12px);
             }

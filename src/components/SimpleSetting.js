@@ -5,21 +5,24 @@ class SimpleSetting extends React.Component {
 
         this.state = {}
         this.state.edited = false
-        this.state.defaultValue = this.props.value
+
+        //This component receives:
+        //value: guilds value for the setting
+        //default: the default value for the setting (in case nu guild value)
 
         this.onChange = this.onChange.bind(this)
         this.saveHandle = this.saveHandle.bind(this)
     }
 
     onChange(event) {
-        if (event.target.value !== event.target.defaultValue)
-            this.setState(({edited:true, value: event.target.value, defaultValue: event.target.defaultValue}))
-        else this.setState(({edited:false, value: event.target.value, defaultValue: event.target.defaultValue}))
+        if (event.target.value !== this.props.value)
+            this.setState(({edited:true, value: event.target.value}))
+        else this.setState(({edited:false, value: event.target.value}))
     }
 
-    saveHandle(event) {
+    saveHandle() {
         this.props.save(this.props.name, this.state.value)
-            .then(() => this.setState(prev => ({edited:false, defaultValue: prev.value})))
+            .then(() => this.setState(() => ({edited:false})))
     }
 
     render() {
@@ -34,7 +37,15 @@ class SimpleSetting extends React.Component {
                         : ""
                 }
                 <span className="setting-name">{this.props.name}:</span>
-                <input defaultValue={this.state.defaultValue ? this.state.defaultValue : this.props.default} onChange={this.onChange}/>
+                {/*
+                {this.props.value}
+                {this.state.value ? this.state.value : 0}
+                {this.state.edited ? 1:0}
+                */}
+                {/* Issue: state doesnt get reset */}
+                <input defaultValue={
+                    (this.props.value ? this.props.value : this.props.default)
+                } onChange={this.onChange}/>
                 <style jsx>{`
                 .simpleSetting {
                     margin: 50px 0;

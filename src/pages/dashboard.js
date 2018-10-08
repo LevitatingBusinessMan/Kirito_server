@@ -11,6 +11,7 @@ import nookies from "nookies"
 import Router from "next/router"
 import fetch from "isomorphic-unfetch"
 import React from "react"
+import NProgress from "nprogress"
 
 const {publicRuntimeConfig} = getConfig()
 
@@ -106,16 +107,22 @@ class Dashboard extends React.Component {
     }
     
     static async getInitialProps(ctx){
+
+        NProgress.configure({ showSpinner: false })
+        Router.onRouteChangeStart = () => NProgress.start()
+        Router.onRouteChangeComplete = () => NProgress.done()
+        Router.onRouteChangeError = () => NProgress.done()    
+
         const guild = ctx.query.guild
         var error = ctx.query.error
-        const reload = ctx.query.guild || "true"
+        const reload = ctx.query.reload || "true"
     
         const cookies = nookies.get(ctx)
         if (cookies.discord && !error) {
             const discord = cookies.discord ? JSON.parse(cookies.discord.substring(2)) : undefined
             let user = cookies.user ? JSON.parse(cookies.user) : undefined
     
-            console.log(user ? "" :"no-user")
+            console.log(user ? null :"no-user")
             
             //User
             if (!user) {

@@ -91,7 +91,7 @@ app.prepare()
             res.cookie("discord", response, {expires})
             res.redirect("/dashboard")
         } else {
-            res.redirect("/dashboard?error=failed_oauth")
+            res.redirect("/dashboard?error=Oauth Failed")
         }
     })
 

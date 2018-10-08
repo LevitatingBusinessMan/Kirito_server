@@ -3,6 +3,9 @@ import Badge from "../components/Badge"
 // eslint-disable-next-line no-unused-vars
 import Link from "next/link"
 import fetch from "isomorphic-unfetch"
+import Router from "next/router"
+import NProgress from "nprogress"
+
 
 const imgStyle = {
     width: "300px",
@@ -88,7 +91,10 @@ const Index = props => (
 
 Index.getInitialProps = async ctx => {
 
-        
+    NProgress.configure({ showSpinner: false })
+    Router.onRouteChangeStart = () => NProgress.start()
+    Router.onRouteChangeComplete = () => NProgress.done()
+    Router.onRouteChangeError = () => NProgress.done()
 
     if (ctx.req) var host = ctx.req.headers.host
     // eslint-disable-next-line no-redeclare

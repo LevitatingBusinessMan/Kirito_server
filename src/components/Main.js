@@ -3,51 +3,10 @@ import React from "react"
 import getConfig from "next/config"
 // eslint-disable-next-line no-unused-vars
 import SimpleSetting from "../components/SimpleSetting"
+// eslint-disable-next-line no-unused-vars
+import SaveMessage from "../components/SaveMessage"
 
 const {publicRuntimeConfig} = getConfig()
-
-// eslint-disable-next-line no-unused-vars
-const SaveMessage = () => (
-    <div className="SaveMessage">
-        <span className="save">Save by clicking on</span>
-        <div className="saveButton tooltip">
-            <span className="tooltiptext left">Save setting (example)</span>
-        </div>
-        <style jsx>{`
-        .saveButton {
-            position: absolute;
-            left: 66px;
-            width: 202px;
-            display: inline;
-            background-image: url(/static/pencil-orange.svg);
-            background-size: 19px 19px;
-            background-repeat: no-repeat;
-            background-position: center;
-            cursor: pointer;
-        }
-        .saveButton:hover {
-            background-image: url(/static/pencil-green.svg);
-        }
-        .tooltiptext {
-            line-height: 9px;
-            left: 121px;
-            height: 19px;
-            background-color: #4EBA00 !important;
-            float: right;
-        }
-        .tooltiptext::after {
-            top: 5px !important;
-            border-color: transparent #4EBA00 transparent transparent !important;
-        }
-        .SaveMessage {
-            display: inline-block;
-            position: absolute;
-            bottom: 30px;
-            left: 30px;
-        }
-        `}</style>
-    </div>
-)
 
 const NoGuildStyle = (
     <style>{`
@@ -82,7 +41,6 @@ class Main extends React.Component {
         this.Alert = this.props.alert
         this.Save = this.Save.bind(this)
         this.state = {}
-        this.state.guild = this.props.guild
     }
 
     async Save(name, value) {
@@ -126,7 +84,7 @@ class Main extends React.Component {
             return (
                 <div className="main">
                     <span className="guildName">{this.props.guild.name}</span>
-                    <SimpleSetting name="prefix" value={this.state.guild.prefix} default="k!" width="237px" save={this.Save.bind(this)} />
+                    <SimpleSetting name="prefix" value={this.props.guild.prefix} default="k!" width="237px" save={this.Save.bind(this)} />
                     <SaveMessage />
                     <style jsx>{`
                         .main {
